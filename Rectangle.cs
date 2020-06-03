@@ -1,19 +1,37 @@
 using System.Windows.Forms;
 using System.Drawing;
 
-class Rectangle : Shape
+public class Rectangle : Shape
 {
-    public Rectangle(int x, int y, int width, int height)
+    private int x, y, width, height;
+    public Rectangle(Pen pen, Brush brush, Point a, Point b) : base(pen, brush, a, b)
     {
-        this.X = x;
-        this.Y = y;
-        this.Width = width;
-        this.Height = height;
+        x = a.X;
+        y = a.Y;
+        width = b.X - a.X;
+        if (width < 0)
+        {
+            x = b.X;
+            width = -width;            
+        }
+        height = b.Y - a.Y;
+        if (height < 0)
+        {
+            y = b.Y;
+            height = -height;
+        }
     }
     public override void Draw(PaintEventArgs e)
     {
         Graphics graphics = e.Graphics;
-        graphics.DrawRectangle(new Pen(Color.Crimson, 4), this.X, this.Y, this.Width, this.Height);
+
+        if (fill != null)
+        {
+            graphics.FillRectangle(fill, x, y, width, height); 
+        }
+        if (outline != null)
+        {
+            graphics.DrawRectangle(outline, x, y, width, height);
+        }
     }
-    private int X, Y, Width, Height;
 }

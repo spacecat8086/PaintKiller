@@ -1,20 +1,30 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Drawing;
 
-class Scene
+public class Scene
 {
+    private Pen currentOutline { get; set; }
+    private Brush currentBrush { get; set; }
+    private List<Shape> shapes;
     public Scene()
     {
-        this.Shapes = new List<Shape>();
+        currentOutline = new Pen(Color.Black, 4);
+        currentBrush = new SolidBrush(Color.DodgerBlue);
+
+        shapes = new List<Shape>();
     }
-    private List<Shape> Shapes;
     public void Add(Shape shape)
     {
-        Shapes.Add(shape);
+        shapes.Add(shape);
+    }
+    public void Remove(Shape shape)
+    {
+        shapes.Remove(shape);
     }
     public void Draw(PaintEventArgs e)
     {
-        foreach (Shape shape in this.Shapes)
+        foreach (Shape shape in shapes)
         {
             shape.Draw(e);
         }

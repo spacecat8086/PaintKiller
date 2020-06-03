@@ -1,19 +1,27 @@
 using System.Windows.Forms;
 using System.Drawing;
 
-class Ellipse : Shape
+public class Ellipse : Shape
 {
-    public Ellipse(int x, int y, int width, int height)
+    private int x, y, width, height;
+    public Ellipse(Pen pen, Brush brush, Point a, Point b) : base(pen, brush, a, b)
     {
-        this.X = x;
-        this.Y = y;
-        this.Width = width;
-        this.Height = height;
+        x = a.X;
+        y = a.Y;
+        width = b.X - a.X;
+        height = b.Y - a.Y;
     }
     public override void Draw(PaintEventArgs e)
     {
         Graphics graphics = e.Graphics;
-        graphics.DrawEllipse(new Pen(Color.Crimson, 4), this.X, this.Y, this.Width, this.Height);
+        
+        if (fill != null)
+        {
+            graphics.FillEllipse(fill, x, y, width, height);
+        }
+        if (outline != null)
+        {
+            graphics.DrawEllipse(outline, x, y, width, height);
+        }
     }
-    private int X, Y, Width, Height;
 }

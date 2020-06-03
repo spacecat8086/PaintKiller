@@ -1,19 +1,23 @@
 using System.Windows.Forms;
 using System.Drawing;
 
-class Line : Shape
+public class Line : Shape
 {
-    public Line(int x0, int y0, int x1, int y1)
+    private int x0, y0, x1, y1;
+    public Line(Pen pen, Brush brush, Point a, Point b) : base(pen, brush, a, b)
     {
-        this.X0 = x0;
-        this.Y0 = y0;
-        this.X1 = x1;
-        this.Y1 = y1;
+        x0 = a.X;
+        y0 = a.Y;
+        x1 = b.X;
+        y1 = b.Y;
     }
     public override void Draw(PaintEventArgs e)
     {
         Graphics graphics = e.Graphics;
-        graphics.DrawLine(new Pen(Color.Crimson, 4), this.X0, this.Y0, this.X1, this.Y1);
+        
+        if (outline != null)
+        {
+            graphics.DrawLine(outline, x0, y0, x1, y1);
+        }
     }
-    private int X0, Y0, X1, Y1;
 }

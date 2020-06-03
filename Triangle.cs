@@ -1,23 +1,31 @@
 using System.Windows.Forms;
 using System.Drawing;
 
-class Triangle : Shape
+public class Triangle : Shape
 {
-    public Triangle(int ax, int ay, int bx, int by, int cx, int cy)
+    private Point[] points;
+    public Triangle(Pen pen, Brush brush, Point a, Point b) : base(pen, brush, a, b)
     {
-        this.Points = new Point[3];
-        this.Points[0].X = ax;
-        this.Points[0].Y = ay;
-        this.Points[1].X = bx;
-        this.Points[1].Y = by;
-        this.Points[2].X = cx;
-        this.Points[2].Y = cy;
+        points = new Point[3];
+        points[0].X = a.X;
+        points[0].Y = b.Y;
+        points[1].X = (a.X + b.X) / 2;
+        points[1].Y = a.Y;
+        points[2].X = b.X;
+        points[2].Y = b.Y;
 
     }
     public override void Draw(PaintEventArgs e)
     {
         Graphics graphics = e.Graphics;
-        graphics.DrawPolygon(new Pen(Color.Crimson, 4), this.Points);
+        
+        if (fill != null)
+        {
+            graphics.FillPolygon(fill, points);
+        }
+        if (outline != null)
+        {
+            graphics.DrawPolygon(outline, points);
+        }
     }
-    private Point[] Points;
 }

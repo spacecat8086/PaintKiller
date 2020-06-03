@@ -1,6 +1,14 @@
 using System.Windows.Forms;
+using System.Drawing;
 
-abstract class Shape
+public abstract class Shape
 {
-    public virtual void Draw(PaintEventArgs e) {}
+    protected Brush fill;
+    protected Pen outline;
+    public Shape(Pen pen, Brush brush, Point a, Point b)
+    {
+        outline = pen;
+        fill = brush;
+    }
+    public abstract void Draw(PaintEventArgs e);
 }
