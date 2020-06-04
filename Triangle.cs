@@ -19,11 +19,8 @@ public class Triangle : Shape
     {
         Graphics graphics = e.Graphics;
         
-        if (fill != null)
-        {
-            graphics.FillPolygon(fill, points);
-        }
-        if (outline != null)
+        graphics.FillPolygon(fill, points);
+        if (outline.Width > 0.01)
         {
             graphics.DrawPolygon(outline, points);
         }

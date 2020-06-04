@@ -15,7 +15,7 @@ public class Line : Shape
     {
         Graphics graphics = e.Graphics;
         
-        if (outline != null)
+        if (outline.Width > 0.01)
         {
             graphics.DrawLine(outline, x0, y0, x1, y1);
         }

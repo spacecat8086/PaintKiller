@@ -18,13 +18,24 @@ namespace PaintKiller
         private Scene scene;
         private Scene UI;
         private event PaintEventHandler UIPaint;
-        private Type selectedShape;
+        private Type selectedShape
+        {
+            get
+            {
+                if (selectedIndex > 0)
+                {
+                    return shapeTypes[selectedIndex - 1];
+                }
+                return null;
+            }
+        }
         private int selectedIndex;
         private int hoverIndex;
         private Point mouseStart;
         private bool isDrawing;
-        private Pen currentPen { get; set; }
-        private Brush currentBrush { get; set; }
+        public static Pen currentPen;
+        public static SolidBrush currentBrush;
+        public OptionForm fmOptions;
         private void InitShapes() 
         {
             shapeCreators = new Dictionary<Type, ConstructorInfo>();
@@ -39,7 +50,6 @@ namespace PaintKiller
         {
             Point a = new Point(100, 150);
             Point b = new Point(200, 250);
-
 
             foreach (var shapeType in shapeTypes)
             {
@@ -60,12 +70,12 @@ namespace PaintKiller
         {
             UI = new Scene();
 
-            Point a = new Point(25, 75);
-            Point b = new Point(75, 125);
+            Point a = new Point(25, 125);
+            Point b = new Point(75, 175);
 
             foreach (var shapeType in shapeTypes)
             {
-                var shapeParams = new object[4] { new Pen(Color.DarkSlateGray, 4), null, a, b };
+                var shapeParams = new object[4] { new Pen(Color.DarkSlateGray, 4), Brushes.Transparent , a, b };
                 UI.Add(shapeCreators[shapeType].Invoke(shapeParams) as Shape);
 
                 a.Y += 75;
@@ -83,13 +93,22 @@ namespace PaintKiller
             // Selection box
             if (selectedIndex > -1)
             {
-                graphics.FillRectangle(Brushes.Gainsboro, 12, 62 + selectedIndex * 75, 75, 75);
+                graphics.FillRectangle(Brushes.Gainsboro, 12, 37 + selectedIndex * 75, 75, 75);
             }
             // Hover box
             if (hoverIndex > -1)
             {
-                graphics.FillRectangle(Brushes.LightBlue, 12, 62 + hoverIndex * 75, 75, 75);
+                graphics.FillRectangle(Brushes.LightBlue, 12, 37 + hoverIndex * 75, 75, 75);
             }
+            // Tool icon
+            Point top = new Point(53, 39);
+            Point left = new Point(43, 54);
+            Point bottom = new Point(73, 74);
+            Point right = new Point(83, 59);
+
+            graphics.DrawLine(new Pen(Color.DarkSlateGray, 4), 30, 105, 70, 45);
+            graphics.FillPolygon(Brushes.DarkSlateGray, new Point[4] { top, left, bottom, right } );
+
             // Shape buttons
             UI.Draw(e);             
         }
@@ -98,8 +117,8 @@ namespace PaintKiller
             int index;
             if (e.X < 100)
             {
-                index = (e.Y + 13) / 75 - 1;
-                if (index < 0 || index >= shapeTypes.Length)
+                index = (e.Y + 38) / 75 - 1;
+                if (index < 0 || index > shapeTypes.Length)
                 {
                     index = -1;
                 }
@@ -119,15 +138,18 @@ namespace PaintKiller
         {
             if (e.X < 100)                      // GUI area
             {
-                int index = (e.Y + 13) / 75 - 1;
-                if (index >= 0 && index < shapeTypes.Length)
+                int index = (e.Y + 38) / 75 - 1;
+                
+                if (index == 0)
                 {
-                    selectedShape = shapeTypes[index];
-                    selectedIndex = index;
+                    fmOptions.Show();
+                }
+                else if (index > 0 && index <= shapeTypes.Length)
+                {
+                    selectedIndex = index;                    
                 }
                 else
                 {
-                    selectedShape = null;
                     selectedIndex = -1;
                 }
                 Invalidate(new System.Drawing.Rectangle(0, 0, 100, Height));
@@ -138,7 +160,10 @@ namespace PaintKiller
                 {
                     isDrawing = false;          // Finish drawing the shape
 
-                    var shapeParams = new object[4] { currentPen, currentBrush, mouseStart, e.Location };
+                    Pen pen = currentPen.Clone() as Pen;
+                    Brush brush = currentBrush.Clone() as Brush;
+
+                    var shapeParams = new object[4] { pen, brush, mouseStart, e.Location };
                     scene.Add(shapeCreators[selectedShape].Invoke(shapeParams) as Shape);
                     Invalidate(new System.Drawing.Rectangle(100, 0, Width, Height));
                 }
@@ -155,19 +180,21 @@ namespace PaintKiller
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(800, 450);
             BackColor = Color.White;
-            Text = "PaintKiller";
-            
-            InitShapes();
-            InitUI();
-            scene = new Scene();
+            Text = "PaintKiller"; 
 
             currentPen = new Pen(Color.Black, 4);
             currentBrush = new SolidBrush(Color.DodgerBlue);
+
+            InitShapes();
+            InitUI();
+            scene = new Scene();
             
             Paint += new PaintEventHandler(Redraw);
             UIPaint += new PaintEventHandler(DrawUI);
             MouseMove += new MouseEventHandler(MouseMoveHandler);
             MouseClick += new MouseEventHandler(ClickHandler);
+
+            fmOptions = new OptionForm();           
         }
     }
 }

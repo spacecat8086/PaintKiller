@@ -25,11 +25,8 @@ public class Rectangle : Shape
     {
         Graphics graphics = e.Graphics;
 
-        if (fill != null)
-        {
-            graphics.FillRectangle(fill, x, y, width, height); 
-        }
-        if (outline != null)
+        graphics.FillRectangle(fill, x, y, width, height); 
+        if (outline.Width > 0.01)
         {
             graphics.DrawRectangle(outline, x, y, width, height);
         }

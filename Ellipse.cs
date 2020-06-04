@@ -15,11 +15,8 @@ public class Ellipse : Shape
     {
         Graphics graphics = e.Graphics;
         
-        if (fill != null)
-        {
-            graphics.FillEllipse(fill, x, y, width, height);
-        }
-        if (outline != null)
+        graphics.FillEllipse(fill, x, y, width, height);
+        if (outline.Width > 0.01 )
         {
             graphics.DrawEllipse(outline, x, y, width, height);
         }
