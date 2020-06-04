@@ -15,7 +15,7 @@ namespace PaintKiller
     {
         private Type[] shapeTypes;
         private Dictionary<Type, ConstructorInfo> shapeCreators;
-        private Scene scene;
+        public static Scene scene;
         private Scene UI;
         private event PaintEventHandler UIPaint;
         private Type selectedShape
@@ -142,6 +142,7 @@ namespace PaintKiller
                 
                 if (index == 0)
                 {
+                    fmOptions = new OptionForm();  
                     fmOptions.Show();
                 }
                 else if (index > 0 && index <= shapeTypes.Length)
@@ -192,9 +193,7 @@ namespace PaintKiller
             Paint += new PaintEventHandler(Redraw);
             UIPaint += new PaintEventHandler(DrawUI);
             MouseMove += new MouseEventHandler(MouseMoveHandler);
-            MouseClick += new MouseEventHandler(ClickHandler);
-
-            fmOptions = new OptionForm();           
+            MouseClick += new MouseEventHandler(ClickHandler);         
         }
     }
 }

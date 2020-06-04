@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 public class Scene
 {
-    private List<Shape> shapes;
+    public List<Shape> shapes { get; set; }
     public Scene()
     {
         shapes = new List<Shape>();

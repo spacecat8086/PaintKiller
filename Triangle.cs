@@ -4,7 +4,7 @@ using System.Drawing;
 public class Triangle : Shape
 {
     private Point[] points;
-    public Triangle(Pen pen, Brush brush, Point a, Point b) : base(pen, brush, a, b)
+    public Triangle(Pen pen, SolidBrush brush, Point a, Point b) : base(pen, brush, a, b)
     {
         points = new Point[3];
         points[0].X = a.X;

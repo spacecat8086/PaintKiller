@@ -8,15 +8,16 @@ public class OptionForm : Form
     private Button btnClose;
     private NumericUpDown udWidth;
     private ColorDialog cdColor;
-    private System.Windows.Forms.PictureBox pbOutline;
-    private System.Windows.Forms.PictureBox pbFill;
+    private PictureBox pbOutline;
+    private PictureBox pbFill;
+    private ListBox lbShapeList;
     private void btnCloseClick(object Sender, EventArgs e)
     {
         Form1.currentPen.Width = (float)udWidth.Value;
         Form1.currentPen.Color = pbOutline.BackColor;
         Form1.currentBrush.Color = pbFill.BackColor;
 
-        Hide();
+        Close();
     }
     public void SelectColor(object Sender, EventArgs e)
     {
@@ -51,6 +52,11 @@ public class OptionForm : Form
 
         cdColor = new ColorDialog();
         cdColor.Color = Form1.currentPen.Color;
+
+        lbShapeList = new ListBox();
+        lbShapeList.Location = new Point(40, 40);
+        lbShapeList.DataSource = Form1.scene.shapes;
+        //lbShapeList.DisplayMember
 
         btnClose = new Button();
         btnClose.Text = "Close";

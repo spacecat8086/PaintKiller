@@ -4,7 +4,7 @@ using System.Drawing;
 public class Rectangle : Shape
 {
     private int x, y, width, height;
-    public Rectangle(Pen pen, Brush brush, Point a, Point b) : base(pen, brush, a, b)
+    public Rectangle(Pen pen, SolidBrush brush, Point a, Point b) : base(pen, brush, a, b)
     {
         x = a.X;
         y = a.Y;

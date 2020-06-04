@@ -4,7 +4,7 @@ using System.Drawing;
 public class Ellipse : Shape
 {
     private int x, y, width, height;
-    public Ellipse(Pen pen, Brush brush, Point a, Point b) : base(pen, brush, a, b)
+    public Ellipse(Pen pen, SolidBrush brush, Point a, Point b) : base(pen, brush, a, b)
     {
         x = a.X;
         y = a.Y;
