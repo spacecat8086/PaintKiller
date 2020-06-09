@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection;
 
@@ -13,8 +10,8 @@ namespace PaintKiller
 {
     public class Form1 : Form
     {
-        private Type[] shapeTypes;
-        private Dictionary<Type, ConstructorInfo> shapeCreators;
+        public static Type[] shapeTypes;
+        public static Dictionary<Type, ConstructorInfo> shapeCreators;
         public static Scene scene;
         private Scene UI;
         private event PaintEventHandler UIPaint;
@@ -58,8 +55,7 @@ namespace PaintKiller
 
                 a.X += 150;
                 b.X += 150;
-            }
-            
+            }            
         }
         private void Redraw(object Sender, PaintEventArgs e)
         {
@@ -143,7 +139,7 @@ namespace PaintKiller
                 if (index == 0)
                 {
                     fmOptions = new OptionForm();  
-                    fmOptions.Show();
+                    fmOptions.Show(this);
                 }
                 else if (index > 0 && index <= shapeTypes.Length)
                 {
@@ -177,11 +173,12 @@ namespace PaintKiller
         }
         public Form1()
         {            
+            // IsMdiContainer = true;
             DoubleBuffered = true;
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(800, 450);
             BackColor = Color.White;
-            Text = "PaintKiller"; 
+            Text = "PaintKiller";
 
             currentPen = new Pen(Color.Black, 4);
             currentBrush = new SolidBrush(Color.DodgerBlue);
@@ -193,7 +190,7 @@ namespace PaintKiller
             Paint += new PaintEventHandler(Redraw);
             UIPaint += new PaintEventHandler(DrawUI);
             MouseMove += new MouseEventHandler(MouseMoveHandler);
-            MouseClick += new MouseEventHandler(ClickHandler);         
+            MouseClick += new MouseEventHandler(ClickHandler);      
         }
     }
 }
