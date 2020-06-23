@@ -5,6 +5,7 @@ using PaintKiller;
 
 public class OptionForm : Form
 {
+    private Form1 mainForm;
     private Button btnAccept;
     private Button btnOpen;
     private Button btnSave;
@@ -17,16 +18,16 @@ public class OptionForm : Form
     private OpenFileDialog odScene;
     private void btnAcceptClick(object Sender, EventArgs e)
     {
-        Form1.currentPen.Width = (float)udWidth.Value;
-        Form1.currentPen.Color = pbOutline.BackColor;
-        Form1.currentBrush.Color = pbFill.BackColor;
-        Owner.Invalidate();
+        mainForm.currentPen.Width = (float)udWidth.Value;
+        mainForm.currentPen.Color = pbOutline.BackColor;
+        mainForm.currentBrush.Color = pbFill.BackColor;
+        mainForm.Invalidate();
 
         Close();
     }
     private void btnCleanupClick(object Sender, EventArgs e)
     {
-        Form1.scene.Empty();
+        mainForm.scene.Empty();
     }
     private void btnOpenClick(object Sender, EventArgs e)
     {
@@ -34,7 +35,7 @@ public class OptionForm : Form
     }
     public void FileOpen(object Sender, EventArgs e)
     {
-        Form1.scene.LoadFrom(odScene.FileName);
+        mainForm.scene.LoadFrom(odScene.FileName);
     }
     private void btnSaveClick(object Sender, EventArgs e)
     {
@@ -42,7 +43,7 @@ public class OptionForm : Form
     }
     public void FileSave(object Sender, EventArgs e)
     {
-        Form1.scene.SaveTo(sdScene.FileName);
+        mainForm.scene.SaveTo(sdScene.FileName);
     }
     public void SelectColor(object Sender, EventArgs e)
     {
@@ -59,28 +60,29 @@ public class OptionForm : Form
         FormBorderStyle = FormBorderStyle.FixedSingle;
         ShowInTaskbar = false;
         Text = "Options";
+        mainForm = Owner as Form1;
 
         udWidth = new NumericUpDown();
         udWidth.Location = new Point(220, 40);
         Controls.Add(udWidth);
-        udWidth.Value = Convert.ToDecimal(Form1.currentPen.Width);
+        udWidth.Value = Convert.ToDecimal(mainForm.currentPen.Width);
 
         pbOutline = new PictureBox();
-        pbOutline.BackColor = Form1.currentPen.Color;
+        pbOutline.BackColor = mainForm.currentPen.Color;
         pbOutline.Location = new Point(220, 80);
         pbOutline.Size = new Size(40, 40);
         pbOutline.Click += new EventHandler(SelectColor);
         Controls.Add(pbOutline);
         
         pbFill = new PictureBox();
-        pbFill.BackColor = Form1.currentBrush.Color;
+        pbFill.BackColor = mainForm.currentBrush.Color;
         pbFill.Location = new Point(280, 80);
         pbFill.Size = new Size(40, 40);
         pbFill.Click += new EventHandler(SelectColor);
         Controls.Add(pbFill);
 
         cdColor = new ColorDialog();
-        cdColor.Color = Form1.currentPen.Color;
+        cdColor.Color = mainForm.currentPen.Color;
 
         sdScene = new SaveFileDialog();
         sdScene.FileOk += new System.ComponentModel.CancelEventHandler(FileSave);

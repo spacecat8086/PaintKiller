@@ -5,14 +5,15 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Reflection;
+using System.IO;
 
 namespace PaintKiller
 {
     public class Form1 : Form
     {
-        public static Type[] shapeTypes;
-        public static Dictionary<Type, ConstructorInfo> shapeCreators;
-        public static Scene scene;
+        public static Type[] shapeTypes { get; private set; }
+        public static Dictionary<Type, ConstructorInfo> shapeCreators { get; private set; }
+        public Scene scene;
         private Scene UI;
         private event PaintEventHandler UIPaint;
         private Type selectedShape
@@ -30,13 +31,38 @@ namespace PaintKiller
         private int hoverIndex;
         private Point mouseStart;
         private bool isDrawing;
-        public static Pen currentPen;
-        public static SolidBrush currentBrush;
-        public OptionForm fmOptions;
+        public Pen currentPen;
+        public SolidBrush currentBrush;
+        private OptionForm fmOptions;
         private void InitShapes() 
         {
             shapeCreators = new Dictionary<Type, ConstructorInfo>();
             shapeTypes = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.BaseType == typeof (Shape)).ToArray();
+
+            string pluginPath = Directory.GetCurrentDirectory() + "\\Plugins";
+            var plugins = new string[0];
+            try
+            {
+                plugins = Directory.GetFiles(pluginPath, "*.dll");
+            }
+            catch
+            {
+                
+            }
+
+            foreach (string path in plugins)
+            {
+                try
+                {
+                    var asm = Assembly.LoadFrom(path);
+                    Type[] newShapes = asm.GetTypes().Where(t => t.BaseType == typeof (Shape)).ToArray();
+                    shapeTypes = shapeTypes.Concat(newShapes).ToArray();                    
+                }
+                catch
+                {
+                    throw(new Exception($"Can't load module {path}!"));
+                }            
+            }
 
             foreach (var shapeType in shapeTypes)
             {
